@@ -1,0 +1,11 @@
+[package]
+name = "rust_wpm"
+version = "0.1.0"
+authors = ["vringar <h_dieter@mail.ru>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+webdriver_client = "^0.2.4"
+async-std = "1.5.0"
