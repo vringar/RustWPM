@@ -9,3 +9,5 @@ edition = "2018"
 [dependencies]
 webdriver_client = "^0.2.4"
 async-std = "1.5.0"
+log = "0.4"
+simple_logger = "1.6.0"
