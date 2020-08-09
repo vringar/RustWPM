@@ -7,20 +7,21 @@ use crate::command_sequence::CommandSequence;
 use eyre::Result;
 
 pub struct Browser {
-    command_sequence: CommandSequence,
+    driver: GeckoDriver,
 }
 
 impl Browser {
-    pub fn new(command_sequence: CommandSequence) -> Self {
-        Browser {
-            command_sequence,
-        }
+    pub fn new() -> Result<Self> {
+        let driver = GeckoDriver::spawn()?;
+        Ok(Browser {
+            driver,
+        })
     }
 
-    pub fn execute_command_sequence(self) -> Result<()> {
-        let driver = GeckoDriver::spawn().unwrap();
-        let session = driver.session(&NewSessionCmd::default())?;
-        for command in self.command_sequence.iter() {
+    pub fn execute_command_sequence(self, command_sequence: CommandSequence) -> Result<()> {
+
+        let session = self.driver.session(&NewSessionCmd::default())?;
+        for command in command_sequence.iter() {
             command.execute(&session)?;
         }
         Ok(())

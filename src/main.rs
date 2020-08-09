@@ -13,9 +13,9 @@ use eyre::Result;
 fn main() -> Result<()> {
     tracing_subscriber::fmt().init();
     info!("First log");
-    let sequence = test().unwrap();
-    let browser = Browser::new(sequence);
-    browser.execute_command_sequence()?;
+    let sequence = test()?;
+    let browser = Browser::new()?;
+    browser.execute_command_sequence(sequence)?;
     Ok(())
 }
 
