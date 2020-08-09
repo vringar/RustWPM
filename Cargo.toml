@@ -7,8 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-webdriver_client = "^0.2.4"
+webdriver_client = { path = "../webdriver_client" }
 async-std = "1.5.0"
-log = "0.4"
-simple_logger = "1.6.0"
+tracing = "0.1"
+tracing-subscriber = "0.2"
 either = "1.5.3"
+eyre = "0.6.0"
