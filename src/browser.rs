@@ -1,10 +1,8 @@
 use webdriver_client::firefox::GeckoDriver;
 use webdriver_client::messages::NewSessionCmd;
-use webdriver_client::{Driver, DriverSession};
+use webdriver_client::Driver;
 
-use crate::commands::{CommandSequence, Commands};
-
-use std::{thread, time};
+use crate::command_sequence::CommandSequence;
 
 use eyre::Result;
 
@@ -15,7 +13,7 @@ pub struct Browser {
 impl Browser {
     pub fn new(command_sequence: CommandSequence) -> Self {
         Browser {
-            command_sequence: command_sequence,
+            command_sequence,
         }
     }
 
@@ -23,16 +21,8 @@ impl Browser {
         let driver = GeckoDriver::spawn().unwrap();
         let session = driver.session(&NewSessionCmd::default())?;
         for command in self.command_sequence.iter() {
-            match command {
-                Commands::Get(url) => self.get(url, &session)?,
-            }
+            command.execute(&session)?;
         }
-        Ok(())
-    }
-
-    fn get(&self, url: &String, session: &DriverSession) -> Result<()> {
-        session.go(&url)?;
-        thread::sleep(time::Duration::from_secs(10));
         Ok(())
     }
 }

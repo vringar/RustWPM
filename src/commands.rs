@@ -1,35 +1,16 @@
-use std::slice::Iter;
+use crate::command_sequence::Command;
+use std::{thread, time};
+use webdriver_client::DriverSession;
 
 use eyre::Result;
-pub enum Commands {
-    Get(String)
+pub struct Get {
+    pub url: String,
 }
 
-pub struct CommandSequence {
-    commands: Box<[Commands]>
-}
-
-pub struct CommandSequenceBuilder{
-    commands : Vec<Commands>
-}
-
-impl CommandSequenceBuilder {
-    pub fn new() -> Self {
-        CommandSequenceBuilder{commands : vec!()}
-    }
-
-    pub fn append_command(&mut self, command: Commands) -> Result<()> {
-        self.commands.push(command);
+impl Command for Get {
+    fn execute(&self, session: &DriverSession) -> Result<()> {
+        session.go(&self.url)?;
+        thread::sleep(time::Duration::from_secs(10));
         Ok(())
-    }
-
-    pub fn build(self) -> CommandSequence{
-        CommandSequence{commands: self.commands.into_boxed_slice()}
-    }
-}
-
-impl CommandSequence { 
-    pub fn iter(&self) -> Iter<Commands> {
-        self.commands.iter()
     }
 }

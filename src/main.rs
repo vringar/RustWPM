@@ -1,6 +1,7 @@
+use tracing::*;
 
-use tracing::debug;
-use tracing_subscriber;
+mod command_sequence;
+use command_sequence::{CommandSequence, CommandSequenceBuilder};
 mod commands;
 use commands::*;
 
@@ -10,9 +11,8 @@ use browser::Browser;
 use eyre::Result;
 
 fn main() -> Result<()> {
-
     tracing_subscriber::fmt().init();
-    debug!("First log");
+    info!("First log");
     let sequence = test().unwrap();
     let browser = Browser::new(sequence);
     browser.execute_command_sequence()?;
@@ -21,7 +21,9 @@ fn main() -> Result<()> {
 
 fn test() -> Result<CommandSequence> {
     let mut builder = CommandSequenceBuilder::new();
-    let command = Commands::Get("http://example.com".to_owned());
+    let command = Get {
+        url: "http://example.com".to_owned(),
+    };
     builder.append_command(command)?;
     let cs = builder.build();
     Ok(cs)
